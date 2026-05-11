@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Awan</title>
+
+  <style>
+
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, #bde0fe, #a2d2ff);
+      position: relative;
+    }
+
+    /* Awan */
+
+    .cloud{
+      position: absolute;
+      color: white;
+      opacity: 0.7;
+      user-select: none;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .cloud1{
+      font-size: 120px;
+      top: 30px;
+      left: 40px;
+    }
+
+    .cloud2{
+      font-size: 90px;
+      top: 120px;
+      right: 70px;
+      animation-delay: 1s;
+    }
+
+    .cloud3{
+      font-size: 140px;
+      bottom: 40px;
+      left: 120px;
+      animation-delay: 2s;
+    }
+
+    .cloud4{
+      font-size: 100px;
+      bottom: 100px;
+      right: 40px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float{
+      0%{
+        transform: translateY(0px);
+      }
+      50%{
+        transform: translateY(-15px);
+      }
+      100%{
+        transform: translateY(0px);
+      }
+    }
+
+    /* Kalkulator */
+
+    .calculator{
+      width: 340px;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      z-index: 2;
+    }
+
+    .title{
+      text-align: center;
+      color: #1d3557;
+      margin-bottom: 15px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    #display{
+      width: 100%;
+      height: 70px;
+      border: none;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      padding: 15px;
+      font-size: 32px;
+      text-align: right;
+      background: #f1f9ff;
+      color: #1d3557;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .buttons{
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 12px;
+    }
+
+    button{
+      height: 60px;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    button:hover{
+      transform: translateY(-3px);
+    }
+
+    .number{
+      background: #dbeafe;
+      color: #1d3557;
+    }
+
+    .operator{
+      background: #74c0fc;
+      color: white;
+    }
+
+    .equal{
+      background: #3b82f6;
+      color: white;
+    }
+
+    .clear{
+      background: #90e0ef;
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Awan -->
+  <div class="cloud cloud1">☁️</div>
+  <div class="cloud cloud2">☁️</div>
+  <div class="cloud cloud3">☁️</div>
+  <div class="cloud cloud4">☁️</div>
+
+  <!-- Kalkulator -->
+  <div class="calculator">
+
+    <div class="title">☁️ Kalkulator ☁️</div>
+
+    <input type="text" id="display" value="0" disabled>
+
+    <div class="buttons">
+
+      <button class="clear" onclick="allClear()">AC</button>
+      <button class="clear" onclick="clearOne()">C</button>
+      <button class="operator" onclick="toggleSign()">±</button>
+      <button class="operator" onclick="appendValue('%')">%</button>
+
+      <button class="number" onclick="appendValue('7')">7</button>
+      <button class="number" onclick="appendValue('8')">8</button>
+      <button class="number" onclick="appendValue('9')">9</button>
+      <button class="operator" onclick="appendValue('/')">÷</button>
+
+      <button class="number" onclick="appendValue('4')">4</button>
+      <button class="number" onclick="appendValue('5')">5</button>
+      <button class="number" onclick="appendValue('6')">6</button>
+      <button class="operator" onclick="appendValue('*')">×</button>
+
+      <button class="number" onclick="appendValue('1')">1</button>
+      <button class="number" onclick="appendValue('2')">2</button>
+      <button class="number" onclick="appendValue('3')">3</button>
+      <button class="operator" onclick="appendValue('-')">−</button>
+
+      <button class="number" onclick="appendValue('0')">0</button>
+      <button class="number" onclick="appendValue('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
+      <button class="operator" onclick="appendValue('+')">+</button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const display = document.getElementById("display");
+
+    function appendValue(value){
+
+      if(display.value === "0" && value !== "."){
+        display.value = value;
+      }else{
+        display.value += value;
+      }
+
+    }
+
+    function allClear(){
+      display.value = "0";
+    }
+
+    function clearOne(){
+
+      if(display.value.length > 1){
+        display.value = display.value.slice(0, -1);
+      }else{
+        display.value = "0";
+      }
+
+    }
+
+    function toggleSign(){
+
+      try{
+
+        let value = parseFloat(display.value);
+
+        if(!isNaN(value)){
+          display.value = value * -1;
+        }
+
+      }catch{
+        display.value = "Error";
+      }
+
+    }
+
+    function calculate(){
+
+      try{
+
+        let expression = display.value.replace(/%/g, "/100");
+
+        let result = eval(expression);
+
+        if(result === Infinity || isNaN(result)){
+          display.value = "Error";
+        }else{
+          display.value = result;
+        }
+
+      }catch{
+        display.value = "Error";
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
